@@ -22,7 +22,7 @@ export class BookingServiceService {
     this.options = { headers: headers };
   }
 
-  checkAvailability(rqSeats):Observable<any>{console.log('here')
+  checkAvailability(rqSeats):Observable<any>{
     return this.http.get<any>(this.domain+'/check-availability/'+rqSeats)
   }
 
