@@ -1,7 +1,6 @@
 const Booking =require('../models/booking')
 const config=require('../config')
 const helper=require('../helper')
-const { response } = require('express')
 exports.checkAvailability=(req,res)=>{
 
     Booking.find({ $or:[{ status: "locked" }, { status: "booked" }],},{seats:1,},(err,result)=>{
