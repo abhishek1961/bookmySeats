@@ -155,31 +155,7 @@ automaticSeatFill(){
 
 }
 
-automaticSeatAllocation(){
 
-  var findMaxgap=0;
-  var arr=[0,...this.filledSeats,this.totalSeats+1];
-  var lval=1;
-  for(var i=0;i<arr.length;i++){
-      if(arr[i+1]-arr[i] > findMaxgap){
-       
-          findMaxgap=arr[i+1]-arr[i]-1;
-          lval=arr[i]+1;
-          if(findMaxgap>=this.reqSeats){break;}
-        
-      }
-   
-  }
-  console.log(findMaxgap,lval)
-  console.log(this.reqSeats)
-
-  if(this.reqSeats <= findMaxgap){
-    for(var i=lval;i<lval+this.reqSeats;i++){
-      console.log(i)
-      this.yourSeats.push(i)
-    }
-  }
-}
 
   
 lockData(){
