@@ -23,4 +23,4 @@
 
 8. For your convenience I made this app live on https://book-myticket.herokuapp.com/ (base URL)
 
-Note: cron is not runnimg on live server. To release tickets on live server use  https://book-myticket.herokuapp.com/api/release-locked/
+Note:To release tickets manually:  https://book-myticket.herokuapp.com/api/release-locked/
