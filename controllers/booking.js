@@ -120,7 +120,7 @@ exports.releaseLocked=(req,res)=>{
     dt.setMinutes( dt.getMinutes() - 6 );
       
 
-    Booking.updateOne({status:'locked',updatedAt:{$lt:dt}},{$set:{status:'released'}},(err,result)=>{
+    Booking.updateMany({status:'locked',updatedAt:{$lt:dt}},{$set:{status:'released'}},(err,result)=>{
         res.json({result:result,dataOrig:dt})
     })
 }
@@ -131,7 +131,7 @@ exports.releaseLockedCron=()=>{
     dt.setMinutes( dt.getMinutes() - 6 );
      
 
-    Booking.updateOne({status:'locked',updatedAt:{$lt:dt}},{$set:{status:'released'}},(err,result)=>{
+    Booking.updateMany({status:'locked',updatedAt:{$lt:dt}},{$set:{status:'released'}},(err,result)=>{
        
     })
 }
