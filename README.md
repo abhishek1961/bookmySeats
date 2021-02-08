@@ -1,6 +1,6 @@
 # Book MY Ticket App
 
-#App uses Nodejs expressjs in backend and frontend build on Angular 10
+#App uses Nodejs, expressjs, MongoDB in backend and frontend build on Angular 10
 
 1. Insatall packages of both frontend(client Directory) and backend using npm install
 
