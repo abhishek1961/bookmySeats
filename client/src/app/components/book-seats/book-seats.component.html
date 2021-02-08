@@ -1,0 +1,51 @@
+<div *ngIf="show" class="card mt-4" >
+    
+    <div class="card-body">
+      <div class="timer">
+        <h4> Time Left </h4>
+        <span > {{mm}} </span>Min
+        <span > {{ss}} </span>S
+    </div>
+      <h5 class="card-title">Booking Details</h5>
+      <p class="card-text class='mr-2'"><span>Status: </span><span>{{bookingDetails.status}}</span></p>
+      
+      <div class='d-flex'>
+          <p class='card-text mr-2'>Locked Seats:</p>
+          <div class=' flex flex-row fixed-wh-20' *ngFor='let seat  of bookingDetails.seats'>
+            <div class='round-val'>
+                <div>{{seat}}</div>
+             </div>
+         </div>
+      </div>
+      
+      
+        <form [formGroup]="form"  (ngSubmit)="onSubmit()">
+            <input hidden type="text" class="form-control" name="bookingId" formControlName="bookingId" matInput placeholder="">
+            <div class="form-group">
+                <label for="name" >name</label>
+                <div [ngClass]="{'has-error':(form.controls.name.errors && form.controls.name.dirty), 'has-success':!form.controls.name.errors}">
+                <input type="email" class="form-control" name="name" id="name"  placeholder="Enter name" formControlName="name">
+                <ul class="help-block">
+                    <li *ngIf="form.controls.name.errors?.required && form.controls.name.dirty">This field is Required</li>
+                    <li *ngIf="(!form.controls.name.errors?.required) &&((form.controls.name.errors?.minlength || form.controls.name.errors?.maxlength)  && form.controls.name.dirty)">Name must be in between 3 to 13 </li>
+                    <li *ngIf="(!(form.controls.name.errors?.required || form.controls.name.errors?.minlength || form.controls.name.errors?.maxlength))&&(form.controls.name.errors?.validatename  && form.controls.name.dirty)">Not a valid name</li>
+                    
+                  </ul>
+                </div>
+              </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <div [ngClass]="{'has-error':(form.controls.email.errors && form.controls.email.dirty), 'has-success':!form.controls.email.errors}">
+                <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email"  formControlName="email">
+                <ul class="help-block">
+                  <li *ngIf="form.controls.email.errors?.required && form.controls.email.dirty">This field is Required</li>                 
+                  <li *ngIf="(!form.controls.email.errors?.required)&&form.controls.email.errors?.validateEmail  && form.controls.email.dirty">Emila is not valid</li>
+                  
+                </ul>
+                </div>
+              </div>
+              <button [disabled]='!form.valid || processing' type="submit" class="btn bg-red">Book Ticket</button>
+            
+        </form>
+    </div>
+  </div>
