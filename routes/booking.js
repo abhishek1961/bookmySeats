@@ -13,10 +13,10 @@ module.exports=(router)=>{
 
     router.get('/release-locked/',releaseLocked);
 
-    // cron.schedule('*/5 * * * *', () => {
-    //     console.log('released lock')
-    //     releaseLockedCron()
-    //   });
+    cron.schedule('*/5 * * * *', () => {
+        console.log('released lock')
+        releaseLockedCron()
+      });
 
 
     return router

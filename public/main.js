@@ -574,10 +574,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function SeatsViewComponent_div_1_div_1_div_5_Template(rf, ctx) { if (rf & 1) {
-    const _r9 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 6);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 9);
-    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SeatsViewComponent_div_1_div_1_div_5_Template_div_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r9); const j_r6 = ctx.index; const i_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]().index; const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2); return ctx_r7.fillSeats(i_r3 * ctx_r7.rowSeats + j_r6 + 1, (i_r3 + 1) * ctx_r7.rowSeats); });
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "div");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -655,6 +653,9 @@ class SeatsViewComponent {
         }
     }
     fillSeats(index, l) {
+        if (l > this.totalSeats) {
+            l = this.totalSeats;
+        }
         var canSelect = this.reqSeats - this.yourSeats.length;
         if (canSelect == 0) {
             this.yourSeats = [];
@@ -679,6 +680,77 @@ class SeatsViewComponent {
                     canSelect--;
                 }
             }
+            return canSelect;
+        }
+    }
+    findMaxVacentEleSet(l, u, row_n) {
+        var freeObj = { max_vacent: 0, lVal: 0, mVal: 0, fVal: 0 };
+        var row_count = row_n;
+        for (var i = 0; i <= (u / row_n) - (l / row_n); i++) {
+            if (((i + 1) * row_n + l > u)) {
+                row_count = u % row_n;
+            }
+            for (var j = i * row_n + 1 + l; j <= i * row_n + row_n + l; j++) {
+                if (j <= u) {
+                    //can add check for yours added seats
+                    if (this.filledSeats.includes(j) || this.yourSeats.includes(j)) {
+                        // last corner case
+                        row_count--;
+                    }
+                }
+            }
+            if (row_count > freeObj.max_vacent) {
+                freeObj.max_vacent = row_count;
+                freeObj.lVal = i * row_n + 1 + l;
+                freeObj.mVal = (i * row_n + row_n) - row_count + 1 + l;
+                freeObj.fVal = i * row_n + row_n + l;
+            }
+            row_count = row_n;
+        }
+        return freeObj;
+    }
+    automaticSeatFill() {
+        // first insertion
+        var retObj = this.findMaxVacentEleSet(0, this.totalSeats, this.rowSeats);
+        this.fillSeats(retObj.mVal, retObj.fVal);
+        // rest neare Insertion  
+        var counter = 1;
+        while (this.reqSeats - this.yourSeats.length != 0) {
+            //check with rowUp   
+            var retObjU = this.findMaxVacentEleSet(retObj.lVal - (counter * this.rowSeats) - 1, retObj.fVal, this.rowSeats);
+            if (retObjU.max_vacent !== 0) {
+                this.fillSeats(retObjU.mVal, retObjU.fVal);
+            }
+            if (this.reqSeats - this.yourSeats.length != 0) {
+                //check with rowDown     
+                var retObjD = this.findMaxVacentEleSet(retObj.lVal - 1, retObj.fVal + (counter * this.rowSeats), this.rowSeats);
+                if (retObjD.max_vacent !== 0) {
+                    this.fillSeats(retObjD.mVal, retObjD.fVal);
+                }
+            }
+            counter++;
+        }
+    }
+    automaticSeatAllocation() {
+        var findMaxgap = 0;
+        var arr = [0, ...this.filledSeats, this.totalSeats + 1];
+        var lval = 1;
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i + 1] - arr[i] > findMaxgap) {
+                findMaxgap = arr[i + 1] - arr[i] - 1;
+                lval = arr[i] + 1;
+                if (findMaxgap >= this.reqSeats) {
+                    break;
+                }
+            }
+        }
+        console.log(findMaxgap, lval);
+        console.log(this.reqSeats);
+        if (this.reqSeats <= findMaxgap) {
+            for (var i = lval; i < lval + this.reqSeats; i++) {
+                console.log(i);
+                this.yourSeats.push(i);
+            }
         }
     }
     lockData() {
@@ -697,15 +769,17 @@ class SeatsViewComponent {
         this.route.paramMap.subscribe((param) => {
             this.reqSeats = parseInt(param.get('rqSeats'));
             this.bs.checkAvailability(this.reqSeats).subscribe(data => {
-                console.log(data);
                 if (data.success) {
                     if (parseInt(param.get('rqSeats')) > data.limit) {
                         alert('You can not book tickets more than ' + data.limit + ' at a time');
                         this.router.navigate(['main']);
                     }
-                    this.rowSeats = data.rowSeats,
-                        this.totalSeats = data.totalSeats;
-                    this.filledSeats = data.filledSeats.sort();
+                    this.rowSeats = data.rowSeats;
+                    this.totalSeats = data.totalSeats;
+                    this.filledSeats = data.filledSeats.sort(function (a, b) {
+                        return a - b;
+                    });
+                    this.automaticSeatFill();
                 }
                 else {
                     alert(data.message);
@@ -716,7 +790,7 @@ class SeatsViewComponent {
     }
 }
 SeatsViewComponent.ɵfac = function SeatsViewComponent_Factory(t) { return new (t || SeatsViewComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_services_booking_service_service__WEBPACK_IMPORTED_MODULE_1__["BookingServiceService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])); };
-SeatsViewComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SeatsViewComponent, selectors: [["app-seats-view"]], decls: 4, vars: 2, consts: [[1, "d-flex", "flex-column"], ["class", "align-self-center", 4, "ngIf"], [1, "btn", "bg-red", "text-center", 3, "disabled", "click"], [1, "align-self-center"], ["class", "m-4 d-flex ", 4, "ngFor", "ngForOf"], [1, "m-4", "d-flex"], [1, "fixed-wh-20"], [1, "round-val"], ["class", " fixed-wh-20", 4, "ngFor", "ngForOf"], [1, "round-val", 3, "ngStyle", "click"]], template: function SeatsViewComponent_Template(rf, ctx) { if (rf & 1) {
+SeatsViewComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SeatsViewComponent, selectors: [["app-seats-view"]], decls: 4, vars: 2, consts: [[1, "d-flex", "flex-column"], ["class", "align-self-center", 4, "ngIf"], [1, "btn", "bg-red", "text-center", 3, "disabled", "click"], [1, "align-self-center"], ["class", "m-4 d-flex ", 4, "ngFor", "ngForOf"], [1, "m-4", "d-flex"], [1, "fixed-wh-20"], [1, "round-val"], ["class", " fixed-wh-20", 4, "ngFor", "ngForOf"], [1, "round-val", 3, "ngStyle"]], template: function SeatsViewComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, SeatsViewComponent_div_1_Template, 2, 1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "button", 2);
@@ -760,6 +834,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// import { environment } from '../../environments/environment';
 class BookingServiceService {
     constructor(http) {
         this.http = http;
@@ -772,7 +847,6 @@ class BookingServiceService {
         this.options = { headers: headers };
     }
     checkAvailability(rqSeats) {
-        console.log('here');
         return this.http.get(this.domain + '/check-availability/' + rqSeats);
     }
     lockSeats(seats) {
