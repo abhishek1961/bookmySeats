@@ -2,7 +2,8 @@
 
 #App uses Nodejs expressjs in backend and frontend build on Angular 10
 
-1. Insatall packages of both frontend and backend using npm install
+1. Insatall packages of both frontend(client Directory) and backend using npm install
+
 
 2. Default ports and base path
     Backend:http://loacalhost/8080 
