@@ -694,7 +694,6 @@ class SeatsViewComponent {
                 if (j <= u) {
                     //can add check for yours added seats
                     if (this.filledSeats.includes(j) || this.yourSeats.includes(j)) {
-                        // last corner case
                         row_count--;
                     }
                 }
@@ -704,6 +703,9 @@ class SeatsViewComponent {
                 freeObj.lVal = i * row_n + 1 + l;
                 freeObj.mVal = (i * row_n + row_n) - row_count + 1 + l;
                 freeObj.fVal = i * row_n + row_n + l;
+                if (freeObj.max_vacent >= this.reqSeats) {
+                    break;
+                }
             }
             row_count = row_n;
         }

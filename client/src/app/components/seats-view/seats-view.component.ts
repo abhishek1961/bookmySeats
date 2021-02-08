@@ -118,7 +118,7 @@ findMaxVacentEleSet(l,u,row_n){
         break;
       }
     }
-    console.log(freeObj)
+    
     row_count=row_n;
     
   }
