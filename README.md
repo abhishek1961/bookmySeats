@@ -21,6 +21,6 @@
 
 7.  A cron is run after every 5 minutes to release  dead-locked seats
 
-8. For your convenience I made this app live on https://otp-sending-app.herokuapp.com (base URL)
+8. For your convenience I made this app live on https://book-myticket.herokuapp.com/ (base URL)
 
-Note: cron is not runnimg on live server. To release tickets on live server use  https://otp-sending-app.herokuapp.com/release-locked/
+Note: cron is not runnimg on live server. To release tickets on live server use  https://book-myticket.herokuapp.com/api/release-locked/
