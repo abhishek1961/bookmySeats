@@ -92,12 +92,16 @@ fillSeats(index,l){
 }
 
 findMaxVacentEleSet(l,u,row_n){
+  if(u>this.totalSeats){u=this.totalSeats}
+  if(l<0){l=0}
   var freeObj={max_vacent:0,lVal:0,mVal:0,fVal:0}
   var row_count=row_n;
   for(var i=0;i<=(u/row_n)-(l/row_n);i++){
     if(((i+1)*row_n+l>u)){
       row_count=u%row_n
+
     }
+    
     for(var j=i*row_n+1+l;j<=i*row_n+row_n+l;j++){
       if(j<=u){
        //can add check for yours added seats
@@ -110,9 +114,15 @@ findMaxVacentEleSet(l,u,row_n){
       
     }
     if(row_count>freeObj.max_vacent){
+      var row_adder=row_n
+      
       freeObj.max_vacent=row_count
       freeObj.lVal=i*row_n+1+l
-      freeObj.mVal=(i*row_n+row_n)-row_count+1+l      
+      if(((i+1)*row_n+l>u)){
+              row_adder=u%row_n;
+      }
+      freeObj.mVal=(i*row_n+row_adder)-row_count+1+l 
+           
       freeObj.fVal=i*row_n+row_n+l
       if(freeObj.max_vacent>=this.reqSeats){
         break;
@@ -122,36 +132,38 @@ findMaxVacentEleSet(l,u,row_n){
     row_count=row_n;
     
   }
-  
   return freeObj
 }
 
 automaticSeatFill(){
   // first insertion
   var retObj=this.findMaxVacentEleSet(0,this.totalSeats,this.rowSeats)
+  
   this.fillSeats(retObj.mVal,retObj.fVal)
   
   // rest neare Insertion  
   var counter=1; 
   while(this.reqSeats-this.yourSeats.length!=0)
   {
-    //check with rowUp   
+    //check with rowUp    
     var retObjU=this.findMaxVacentEleSet(retObj.lVal-(counter*this.rowSeats)-1,retObj.fVal,this.rowSeats)
     if(retObjU.max_vacent!==0){
       this.fillSeats(retObjU.mVal,retObjU.fVal)
     }
+   
+    //check with rowDown
     if(this.reqSeats-this.yourSeats.length!=0){
-      //check with rowDown     
       var retObjD=this.findMaxVacentEleSet(retObj.lVal-1,retObj.fVal+(counter*this.rowSeats),this.rowSeats)
       if(retObjD.max_vacent!==0){
         this.fillSeats(retObjD.mVal,retObjD.fVal)
       }
+      
     }
 
     counter++
   }
   
-
+ 
 
 }
 
@@ -161,7 +173,7 @@ automaticSeatFill(){
 lockData(){
   this.btnDisabled=true;
   this.bs.lockSeats({seats:this.yourSeats}).subscribe(data=>{
-    console.log(data)
+    
     if(data.success){     
       localStorage.setItem('bookingId',data.result.bookingId)
       

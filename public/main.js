@@ -684,6 +684,12 @@ class SeatsViewComponent {
         }
     }
     findMaxVacentEleSet(l, u, row_n) {
+        if (u > this.totalSeats) {
+            u = this.totalSeats;
+        }
+        if (l < 0) {
+            l = 0;
+        }
         var freeObj = { max_vacent: 0, lVal: 0, mVal: 0, fVal: 0 };
         var row_count = row_n;
         for (var i = 0; i <= (u / row_n) - (l / row_n); i++) {
@@ -699,9 +705,13 @@ class SeatsViewComponent {
                 }
             }
             if (row_count > freeObj.max_vacent) {
+                var row_adder = row_n;
                 freeObj.max_vacent = row_count;
                 freeObj.lVal = i * row_n + 1 + l;
-                freeObj.mVal = (i * row_n + row_n) - row_count + 1 + l;
+                if (((i + 1) * row_n + l > u)) {
+                    row_adder = u % row_n;
+                }
+                freeObj.mVal = (i * row_n + row_adder) - row_count + 1 + l;
                 freeObj.fVal = i * row_n + row_n + l;
                 if (freeObj.max_vacent >= this.reqSeats) {
                     break;
@@ -718,13 +728,13 @@ class SeatsViewComponent {
         // rest neare Insertion  
         var counter = 1;
         while (this.reqSeats - this.yourSeats.length != 0) {
-            //check with rowUp   
+            //check with rowUp    
             var retObjU = this.findMaxVacentEleSet(retObj.lVal - (counter * this.rowSeats) - 1, retObj.fVal, this.rowSeats);
             if (retObjU.max_vacent !== 0) {
                 this.fillSeats(retObjU.mVal, retObjU.fVal);
             }
+            //check with rowDown
             if (this.reqSeats - this.yourSeats.length != 0) {
-                //check with rowDown     
                 var retObjD = this.findMaxVacentEleSet(retObj.lVal - 1, retObj.fVal + (counter * this.rowSeats), this.rowSeats);
                 if (retObjD.max_vacent !== 0) {
                     this.fillSeats(retObjD.mVal, retObjD.fVal);
@@ -733,32 +743,9 @@ class SeatsViewComponent {
             counter++;
         }
     }
-    automaticSeatAllocation() {
-        var findMaxgap = 0;
-        var arr = [0, ...this.filledSeats, this.totalSeats + 1];
-        var lval = 1;
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i + 1] - arr[i] > findMaxgap) {
-                findMaxgap = arr[i + 1] - arr[i] - 1;
-                lval = arr[i] + 1;
-                if (findMaxgap >= this.reqSeats) {
-                    break;
-                }
-            }
-        }
-        console.log(findMaxgap, lval);
-        console.log(this.reqSeats);
-        if (this.reqSeats <= findMaxgap) {
-            for (var i = lval; i < lval + this.reqSeats; i++) {
-                console.log(i);
-                this.yourSeats.push(i);
-            }
-        }
-    }
     lockData() {
         this.btnDisabled = true;
         this.bs.lockSeats({ seats: this.yourSeats }).subscribe(data => {
-            console.log(data);
             if (data.success) {
                 localStorage.setItem('bookingId', data.result.bookingId);
                 alert(data.message);
@@ -830,17 +817,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookingServiceService", function() { return BookingServiceService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
-/* harmony import */ var _environments_environment_prod__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment.prod */ "./src/environments/environment.prod.ts");
+/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
+
+
+// import { environment } from '../../environments/environment.prod';
 
 
 
-
-
-// import { environment } from '../../environments/environment';
 class BookingServiceService {
     constructor(http) {
         this.http = http;
-        this.domain = _environments_environment_prod__WEBPACK_IMPORTED_MODULE_2__["environment"].domain;
+        this.domain = _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].domain;
     }
     createAuthenticationHeaders() {
         const headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
@@ -869,24 +856,6 @@ BookingServiceService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵd
                 providedIn: 'root'
             }]
     }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }]; }, null); })();
-
-
-/***/ }),
-
-/***/ "./src/environments/environment.prod.ts":
-/*!**********************************************!*\
-  !*** ./src/environments/environment.prod.ts ***!
-  \**********************************************/
-/*! exports provided: environment */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
-const environment = {
-    production: true,
-    domain: '/api'
-};
 
 
 /***/ }),
