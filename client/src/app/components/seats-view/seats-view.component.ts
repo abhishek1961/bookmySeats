@@ -113,7 +113,7 @@ findMaxVacentEleSet(l,u,row_n){
       }
       
     }
-    if(row_count>freeObj.max_vacent){
+    if(row_count>freeObj.max_vacent || row_count==this.reqSeats){
       var row_adder=row_n
       
       freeObj.max_vacent=row_count
@@ -124,7 +124,8 @@ findMaxVacentEleSet(l,u,row_n){
       freeObj.mVal=(i*row_n+row_adder)-row_count+1+l 
            
       freeObj.fVal=i*row_n+row_n+l
-      if(freeObj.max_vacent>=this.reqSeats){
+      if(freeObj.max_vacent==this.reqSeats){
+        console.log(freeObj.max_vacent,this.reqSeats)
         break;
       }
     }

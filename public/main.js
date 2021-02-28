@@ -343,8 +343,8 @@ class BookSeatsComponent {
         this.bookingDetails = {};
         this.processing = false;
         this.show = false;
-        this.mm = 5;
-        this.ss = 0;
+        this.mm = 0;
+        this.ss = 30;
         this.createForm();
     }
     createForm() {
@@ -574,8 +574,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function SeatsViewComponent_div_1_div_1_div_5_Template(rf, ctx) { if (rf & 1) {
+    const _r9 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵgetCurrentView"]();
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 6);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "div", 9);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SeatsViewComponent_div_1_div_1_div_5_Template_div_click_1_listener() { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵrestoreView"](_r9); const j_r6 = ctx.index; const i_r3 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]().index; const ctx_r7 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"](2); return ctx_r7.fillSeats(i_r3 * ctx_r7.rowSeats + j_r6 + 1, (i_r3 + 1) * ctx_r7.rowSeats); });
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "div");
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](3);
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -704,7 +706,7 @@ class SeatsViewComponent {
                     }
                 }
             }
-            if (row_count > freeObj.max_vacent) {
+            if (row_count > freeObj.max_vacent || row_count == this.reqSeats) {
                 var row_adder = row_n;
                 freeObj.max_vacent = row_count;
                 freeObj.lVal = i * row_n + 1 + l;
@@ -713,7 +715,8 @@ class SeatsViewComponent {
                 }
                 freeObj.mVal = (i * row_n + row_adder) - row_count + 1 + l;
                 freeObj.fVal = i * row_n + row_n + l;
-                if (freeObj.max_vacent >= this.reqSeats) {
+                if (freeObj.max_vacent == this.reqSeats) {
+                    console.log(freeObj.max_vacent, this.reqSeats);
                     break;
                 }
             }
@@ -779,7 +782,7 @@ class SeatsViewComponent {
     }
 }
 SeatsViewComponent.ɵfac = function SeatsViewComponent_Factory(t) { return new (t || SeatsViewComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_services_booking_service_service__WEBPACK_IMPORTED_MODULE_1__["BookingServiceService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])); };
-SeatsViewComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SeatsViewComponent, selectors: [["app-seats-view"]], decls: 4, vars: 2, consts: [[1, "d-flex", "flex-column"], ["class", "align-self-center", 4, "ngIf"], [1, "btn", "bg-red", "text-center", 3, "disabled", "click"], [1, "align-self-center"], ["class", "m-4 d-flex ", 4, "ngFor", "ngForOf"], [1, "m-4", "d-flex"], [1, "fixed-wh-20"], [1, "round-val"], ["class", " fixed-wh-20", 4, "ngFor", "ngForOf"], [1, "round-val", 3, "ngStyle"]], template: function SeatsViewComponent_Template(rf, ctx) { if (rf & 1) {
+SeatsViewComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SeatsViewComponent, selectors: [["app-seats-view"]], decls: 4, vars: 2, consts: [[1, "d-flex", "flex-column"], ["class", "align-self-center", 4, "ngIf"], [1, "btn", "bg-red", "text-center", 3, "disabled", "click"], [1, "align-self-center"], ["class", "m-4 d-flex ", 4, "ngFor", "ngForOf"], [1, "m-4", "d-flex"], [1, "fixed-wh-20"], [1, "round-val"], ["class", " fixed-wh-20", 4, "ngFor", "ngForOf"], [1, "round-val", 3, "ngStyle", "click"]], template: function SeatsViewComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, SeatsViewComponent_div_1_Template, 2, 1, "div", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](2, "button", 2);
@@ -817,17 +820,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BookingServiceService", function() { return BookingServiceService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/__ivy_ngcc__/fesm2015/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/__ivy_ngcc__/fesm2015/http.js");
-/* harmony import */ var _environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment */ "./src/environments/environment.ts");
-
-
-// import { environment } from '../../environments/environment.prod';
+/* harmony import */ var _environments_environment_prod__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../environments/environment.prod */ "./src/environments/environment.prod.ts");
 
 
 
+
+
+// import { environment } from '../../environments/environment';
 class BookingServiceService {
     constructor(http) {
         this.http = http;
-        this.domain = _environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].domain;
+        this.domain = _environments_environment_prod__WEBPACK_IMPORTED_MODULE_2__["environment"].domain;
     }
     createAuthenticationHeaders() {
         const headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
@@ -856,6 +859,24 @@ BookingServiceService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵd
                 providedIn: 'root'
             }]
     }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "./src/environments/environment.prod.ts":
+/*!**********************************************!*\
+  !*** ./src/environments/environment.prod.ts ***!
+  \**********************************************/
+/*! exports provided: environment */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
+const environment = {
+    production: true,
+    domain: '/api'
+};
 
 
 /***/ }),

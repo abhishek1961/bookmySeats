@@ -4,7 +4,8 @@
         <div class='m-4 d-flex ' *ngFor='let in of counter(totalSeats/rowSeats) ;let i = index'>
            <div class=' fixed-wh-20'><div class='round-val'><div>R{{i+1}}</div></div></div> 
            <div class=' fixed-wh-20' *ngFor='let in of specialCounter(i,totalSeats,rowSeats) ;let j = index'>
-               <div [ngStyle]="getColorcode(i*rowSeats+j+1)" class='round-val'>
+               <div [ngStyle]="getColorcode(i*rowSeats+j+1)" class='round-val' 
+               (click)="fillSeats(i*rowSeats+j+1,(i+1)*rowSeats)">
                    <div>{{i*rowSeats+j+1}}</div>
                 </div>
             </div>

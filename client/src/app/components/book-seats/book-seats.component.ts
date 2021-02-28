@@ -14,8 +14,8 @@ export class BookSeatsComponent implements OnInit {
   form:FormGroup;
   processing=false;
   show=false
-  mm:number=5;
-  ss:number=0;
+  mm:number=0;
+  ss:number=30;
   t;
 
   constructor(private bs:BookingServiceService, private route:ActivatedRoute,private router:Router,private frombuilder:FormBuilder) { 
